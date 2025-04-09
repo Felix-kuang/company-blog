@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { BlogDto } from './blog.dto';
+import { BlogDto } from './dto/blog.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('blog')
@@ -20,11 +20,6 @@ export class BlogController {
   @Get()
   findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
     return this.blogService.findAll(page, limit);
-  }
-
-  @Get(':slug')
-  findOne(@Param('slug') slug: string) {
-    return this.blogService.findOne(slug);
   }
 
   @UseGuards(JwtAuthGuard)
