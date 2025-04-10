@@ -1,12 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 
-// const services = [
-//   { title: "Web Development", desc: "Kami membangun website yang cepat dan modern." },
-//   { title: "SEO Optimization", desc: "Optimasi website biar muncul di halaman pertama Google." },
-//   { title: "Digital Marketing", desc: "Strategi marketing digital yang efektif dan hasil nyata." },
-// ];
-
 export default function Services() {
   const [services, setServices] = useState([]);
   useEffect(() => {
@@ -14,7 +8,7 @@ export default function Services() {
       .then((res) => res.json())
       .then((data) => setServices(data))
       .catch((err) => console.error("Terjadi Error:", err));
-  });
+  }, []);
 
   return (
     <div className="text-center">

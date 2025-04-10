@@ -1,10 +1,17 @@
-const faqs = [
-  { question: "Apakah layanan ini berbayar?", answer: "Ya, layanan kami berbayar dengan harga yang kompetitif." },
-  { question: "Apakah ada garansi?", answer: "Kami memberikan garansi kepuasan pelanggan selama 30 hari." },
-  { question: "Bagaimana cara menghubungi customer support?", answer: "Silakan hubungi kami melalui halaman Contact atau email." },
-];
+"use client";
+
+import { useEffect, useState } from "react";
 
 export default function FAQ() {
+  const [faqs, setFaqs] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/faq")
+      .then((res) => res.json())
+      .then((data) => setFaqs(data))
+      .catch((err) => console.error("Terjadi Error:", err));
+  }, []);
+
   return (
     <div className="text-center">
       <h1 className="section-title">Frequently Asked Questions</h1>

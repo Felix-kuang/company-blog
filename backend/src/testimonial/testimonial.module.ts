@@ -4,6 +4,6 @@ import { TestimonialService } from './testimonial.service';
 
 @Module({
   controllers: [TestimonialController],
-  providers: [TestimonialService]
+  providers: [TestimonialService],
 })
 export class TestimonialModule {}
