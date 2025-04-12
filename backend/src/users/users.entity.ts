@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Blog } from 'src/blog/blog.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Users {
@@ -13,4 +14,7 @@ export class Users {
 
   @Column({ unique: true })
   email: string;
+
+  @OneToMany(() => Blog, (blog) => blog.author)
+  blogs: Blog[];
 }

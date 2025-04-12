@@ -13,6 +13,7 @@ export class BlogService {
 
   findAll(page: number = 1, limit: number = 10): Promise<Blog[]> {
     return this.blogRepository.find({
+      relations: ['author'],
       where: { isDeleted: false },
       skip: (page - 1) * limit,
       take: limit,
@@ -22,6 +23,7 @@ export class BlogService {
   async findOne(slug: string): Promise<Blog> {
     const blog = await this.blogRepository.findOne({
       where: { slug, isDeleted: false },
+      relations: ['author'],
     });
 
     if (!blog) {

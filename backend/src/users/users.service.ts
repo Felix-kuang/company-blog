@@ -14,7 +14,7 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { email } });
   }
 
-  // Validasi password user (misalnya untuk login)
+  // Validasi password user (untuk login)
   async validateUserPassword(
     email: string,
     password: string,
