@@ -3,12 +3,13 @@ import { useState, useEffect } from "react";
 
 export default function Services() {
   const [services, setServices] = useState([]);
+
   useEffect(() => {
-    fetch("http://localhost:3000/our-service")
-      .then((res) => res.json())
-      .then((data) => setServices(data))
-      .catch((err) => console.error("Terjadi Error:", err));
-  }, []);
+      fetch("http://192.168.18.4:3000/our-service")
+        .then((res) => res.json())
+        .then((data) => setServices(data))
+        .catch((err) => console.error("Terjadi Error:", err));
+    }, []);
 
   return (
     <div className="text-center">

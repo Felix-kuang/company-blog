@@ -1,30 +1,81 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Minus, Plus } from "lucide-react";
 
 export default function FAQ() {
   const [faqs, setFaqs] = useState([]);
+  const [openIndex, setOpenIndex] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/faq")
+    fetch("http://192.168.18.4:3000/faq")
       .then((res) => res.json())
       .then((data) => setFaqs(data))
       .catch((err) => console.error("Terjadi Error:", err));
   }, []);
 
-  return (
-    <div className="text-center">
-      <h1 className="section-title">Frequently Asked Questions</h1>
-      <p className="text-muted">Pertanyaan yang sering diajukan:</p>
+  const toggle = (i) => setOpenIndex(openIndex === i ? null : i);
 
-      <div className="mt-8 max-w-2xl mx-auto">
-        {faqs.map((faq, index) => (
-          <div key={index} className="bg-white p-4 rounded-lg shadow-md mb-4">
-            <h3 className="text-lg font-semibold">{faq.question}</h3>
-            <p className="text-muted">{faq.answer}</p>
+  return (
+    <div className="space-y-4">
+      <h2 className="font-bold text-2xl mb-5">FAQ</h2>
+
+      {faqs.map((faq, i) => {
+        const isOpen = openIndex === i;
+
+        return (
+          <div
+            key={i}
+            className={`border 
+              ${isOpen ? "border-blue-500" : "border-gray-300"}
+              transition
+              rounded-lg overflow-hidden`}
+          >
+            <button
+              onClick={() => toggle(i)}
+              className="
+              flex justify-between items-center
+              w-full px-4 py-3
+              text-left font-medium bg-white
+              hover:bg-gray-50 transition"
+            >
+              <span>{faq.question}</span>
+              {isOpen ? (
+                <motion.div
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 180 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Minus />
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ rotate: 180 }}
+                  animate={{ rotate: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Plus />
+                </motion.div>
+              )}
+            </button>
+
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <div className="px-4 py-3 bg-white border-t border-gray-200 text-gray-600">
+                    {faq.answer}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }

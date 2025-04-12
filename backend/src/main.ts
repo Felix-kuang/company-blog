@@ -5,8 +5,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:3001', // atau wildcard '*', tapi lebih aman specify
-    credentials: true, // kalau lu pakai cookies/token di header
+    origin: ['http://192.168.18.4:3001'],
+    credentials: true,
   });
 
   await app.listen(process.env.PORT ?? 3000);
