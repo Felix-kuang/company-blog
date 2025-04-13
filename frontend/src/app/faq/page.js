@@ -8,11 +8,11 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
 
   useEffect(() => {
-    fetch("http://192.168.18.4:3000/faq")
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/faq`)
       .then((res) => res.json())
       .then((data) => setFaqs(data))
       .catch((err) => console.error("Terjadi Error:", err));
-  }, []);
+  });
 
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i);
 

@@ -13,10 +13,10 @@ export class Blog {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('varchar', { length: 255, nullable: false })
   title: string;
 
-  @Column()
+  @Column('text', { nullable: false })
   content: string;
 
   @Column({ default: false })

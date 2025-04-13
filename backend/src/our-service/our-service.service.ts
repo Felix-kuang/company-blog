@@ -13,9 +13,7 @@ export class OurServiceService {
   findAll(): Promise<OurService[]> {
     return this.ourServiceRepository.find({
       order: { id: 'ASC' },
-      where: {
-        isActive: true,
-      },
+      where: { isActive: true },
     });
   }
 

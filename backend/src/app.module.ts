@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { FaqModule } from './faq/faq.module';
 import { TestimonialModule } from './testimonial/testimonial.module';
 import { OurServiceModule } from './our-service/our-service.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { OurServiceModule } from './our-service/our-service.module';
     FaqModule,
     TestimonialModule,
     OurServiceModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

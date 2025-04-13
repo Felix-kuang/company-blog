@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +27,7 @@ export class AuthController {
     return this.authService.generateJwt(user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     // Cek apakah user sudah ada

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Testimonials from "@/components/Testimonials";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export default function HomePage() {
   return (
