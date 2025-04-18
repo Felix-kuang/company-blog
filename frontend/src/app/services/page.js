@@ -3,12 +3,11 @@ import { useState, useEffect } from "react";
 
 export default function Services() {
   const [services, setServices] = useState([]);
-  const baseUrl = process.env.BASE_URL;
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/our-service`)
       .then((res) => res.json())
-      .then((data) => setServices(data))
+      .then((data) => setServices(data.data))
       .catch((err) => console.error("Terjadi Error:", err));
   });
 

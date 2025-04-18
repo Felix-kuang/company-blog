@@ -1,19 +1,29 @@
-import { IsEmail, IsPhoneNumber, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 
 export class CompanyDto {
+  @IsNotEmpty()
   @IsString()
   name: string;
 
+  @IsOptional()
   @IsString()
-  slogan: string;
+  slogan?: string;
 
+  @IsOptional()
   @IsString()
-  about: string;
+  about?: string;
 
-  @IsString()
+  @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
-  @IsPhoneNumber('ID')
-  phone: string;
+  @IsOptional()
+  @IsPhoneNumber('ID') // Ganti sesuai country code kalo perlu
+  phone?: string;
 }

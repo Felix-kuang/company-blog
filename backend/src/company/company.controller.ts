@@ -18,8 +18,8 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.companyService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return ResponseHelper.success(await this.companyService.findOne(id));
   }
 
   @UseGuards(JwtAuthGuard)
@@ -28,10 +28,10 @@ export class CompanyController {
     return ResponseHelper.success(
       await this.companyService.create(
         data.name,
-        data.slogan,
-        data.about,
-        data.email,
-        data.phone,
+        data.slogan || '',
+        data.about || '',
+        data.email || '',
+        data.phone || '',
       ),
       201,
     );
@@ -44,10 +44,10 @@ export class CompanyController {
       await this.companyService.update(
         +id,
         data.name,
-        data.slogan,
-        data.about,
-        data.email,
-        data.phone,
+        data.slogan || '',
+        data.about || '',
+        data.email || '',
+        data.phone || '',
       ),
     );
   }

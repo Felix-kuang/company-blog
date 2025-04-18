@@ -3,13 +3,14 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export default function About() {
-  const { companyData, setCompanyData } = [];
-  const baseUrl = process.env.BASE_URL;
+  const  [companyData, setCompanyData] = useState([]);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/company`)
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`
+    console.log(url)
+    fetch(url)
       .then((res) => res.json())
-      .then((data) => setCompanyData(data))
+      .then((data) => {console.log(data);setCompanyData(data.data)})
       .catch((err) => console.error("Terjadi Error:", err));
   });
 
