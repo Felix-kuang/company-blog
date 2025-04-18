@@ -11,37 +11,45 @@ import {
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { OurServiceService } from './our-service.service';
 import { OurServiceDto } from './dto/our-service.dto';
+import { ResponseHelper } from 'src/utils/response.helper';
 
 @Controller('our-service')
 export class OurServiceController {
   constructor(private readonly ourServiceService: OurServiceService) {}
 
   @Get()
-  findAll() {
-    return this.ourServiceService.findAll();
+  async findAll() {
+    return ResponseHelper.success(await this.ourServiceService.findAll());
   }
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() data: OurServiceDto) {
-    return this.ourServiceService.create(data.title, data.description);
+  async create(@Body() data: OurServiceDto) {
+    return ResponseHelper.success(
+      await this.ourServiceService.create(data.title, data.description),
+      201,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: OurServiceDto) {
-    return this.ourServiceService.update(+id, data.title, data.description);
+  async update(@Param('id') id: string, @Body() data: OurServiceDto) {
+    return ResponseHelper.success(
+      await this.ourServiceService.update(+id, data.title, data.description),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id/toggle')
-  toggleActive(@Param('id') id: string) {
-    return this.ourServiceService.toggleActive(+id);
+  async toggleActive(@Param('id') id: string) {
+    return ResponseHelper.success(
+      await this.ourServiceService.toggleActive(+id),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.ourServiceService.delete(+id);
+  async delete(@Param('id') id: string) {
+    return ResponseHelper.success(await this.ourServiceService.delete(+id));
   }
 }

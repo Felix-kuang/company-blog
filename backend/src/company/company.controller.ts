@@ -11,6 +11,7 @@ import {
 import { CompanyService } from './company.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CompanyDto } from './dto/company.dto';
+import { ResponseHelper } from 'src/utils/response.helper';
 
 @Controller('company')
 export class CompanyController {
@@ -23,26 +24,31 @@ export class CompanyController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() data: CompanyDto) {
-    return this.companyService.create(
-      data.name,
-      data.slogan,
-      data.about,
-      data.email,
-      data.phone,
+  async create(@Body() data: CompanyDto) {
+    return ResponseHelper.success(
+      await this.companyService.create(
+        data.name,
+        data.slogan,
+        data.about,
+        data.email,
+        data.phone,
+      ),
+      201,
     );
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: CompanyDto) {
-    return this.companyService.update(
-      +id,
-      data.name,
-      data.slogan,
-      data.about,
-      data.email,
-      data.phone,
+  async update(@Param('id') id: string, @Body() data: CompanyDto) {
+    return ResponseHelper.success(
+      await this.companyService.update(
+        +id,
+        data.name,
+        data.slogan,
+        data.about,
+        data.email,
+        data.phone,
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ResponseHelper } from 'src/utils/response.helper';
 
 @Controller('auth')
 export class AuthController {
@@ -24,7 +25,7 @@ export class AuthController {
     }
 
     // Generate JWT jika user valid
-    return this.authService.generateJwt(user);
+    return ResponseHelper.success(this.authService.generateJwt(user));
   }
 
   @UseGuards(JwtAuthGuard)
@@ -35,7 +36,7 @@ export class AuthController {
       registerDto.email,
     );
     if (existingUser) {
-      throw new Error('User already exists'); // Atau lempar exception yang sesuai
+      return ResponseHelper.error(409); // Atau lempar exception yang sesuai
     }
 
     // Buat user baru
@@ -46,6 +47,6 @@ export class AuthController {
     );
 
     // Generate JWT untuk user baru
-    return this.authService.generateJwt(newUser);
+    return ResponseHelper.success(this.authService.generateJwt(newUser), 201);
   }
 }

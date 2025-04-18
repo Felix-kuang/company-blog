@@ -1,18 +1,30 @@
 // src/common/helpers/response.helper.ts
 
 export class ResponseHelper {
-  static success(data: unknown, message: string = 'Success') {
+  private static messageMap: Record<number, string> = {
+    200: 'OK',
+    201: 'Created Successfully',
+    400: 'Bad Request',
+    401: 'Unauthorized',
+    404: 'Not Found',
+    409: 'User Already Exists',
+    500: 'Internal Server Error',
+    // you can add more...
+  };
+
+  static success<T>(data: T, code: number = 200) {
     return {
       status: 'success',
-      message,
+      message: `${code}: ${this.messageMap[code] ?? 'Success'}`,
       data,
     };
   }
 
-  static error(message: string, data: unknown = null) {
+  static error(code: number, data: unknown = null) {
     return {
       status: 'error',
-      message,
+      code,
+      message: `${code}: ${this.messageMap[code] ?? 'Error'}`,
       data,
     };
   }

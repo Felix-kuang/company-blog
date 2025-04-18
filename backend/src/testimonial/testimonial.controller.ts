@@ -11,37 +11,45 @@ import {
 import { TestimonialService } from './testimonial.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { TestimonialDto } from './dto/testimonial.dto';
+import { ResponseHelper } from 'src/utils/response.helper';
 
 @Controller('testimonial')
 export class TestimonialController {
   constructor(private readonly testimonialService: TestimonialService) {}
 
   @Get()
-  findAll() {
-    return this.testimonialService.findAll();
+  async findAll() {
+    return ResponseHelper.success(await this.testimonialService.findAll());
   }
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() data: TestimonialDto) {
-    return this.testimonialService.create(data.name, data.testimony);
+  async create(@Body() data: TestimonialDto) {
+    return ResponseHelper.success(
+      await this.testimonialService.create(data.name, data.testimony),
+      201,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: TestimonialDto) {
-    return this.testimonialService.update(+id, data.name, data.testimony);
+  async update(@Param('id') id: string, @Body() data: TestimonialDto) {
+    return ResponseHelper.success(
+      await this.testimonialService.update(+id, data.name, data.testimony),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id/toggle')
-  toggleActive(@Param('id') id: string) {
-    return this.testimonialService.toggleActive(+id);
+  async toggleActive(@Param('id') id: string) {
+    return ResponseHelper.success(
+      await this.testimonialService.toggleActive(+id),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.testimonialService.delete(+id);
+  async delete(@Param('id') id: string) {
+    return ResponseHelper.success(await this.testimonialService.delete(+id));
   }
 }
