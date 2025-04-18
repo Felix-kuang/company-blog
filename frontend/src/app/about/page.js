@@ -1,24 +1,12 @@
-"use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
 
-export default function About() {
-  const  [companyData, setCompanyData] = useState([]);
-
-  useEffect(() => {
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`
-    console.log(url)
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {console.log(data);setCompanyData(data.data)})
-      .catch((err) => console.error("Terjadi Error:", err));
-  });
-
+export default async function About() {
+  const companyData = await getCompanyData();
   return (
     <div className="text-center">
       <h1 className="section-title">About Us</h1>
       <p className="text-muted max-w-2xl mx-auto">
-        {companyData.about}
+        {companyData.about || "Loading..."}
       </p>
 
       <div className="mt-8 flex flex-col md:flex-row items-center justify-center gap-6">
@@ -39,4 +27,13 @@ export default function About() {
       </div>
     </div>
   );
+}
+
+async function getCompanyData() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
+    cache: 'no-cache',
+    next: { revalidate: 24*60*60 },
+  })
+  const data = await res.json();
+  return data.data;
 }

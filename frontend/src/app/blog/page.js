@@ -1,12 +1,10 @@
 import Link from "next/link";
 
-const articles = [
-  { title: "Artikel 1", slug: "artikel-1", desc: "Ini adalah deskripsi singkat artikel pertama." },
-  { title: "Artikel 2", slug: "artikel-2", desc: "Ini adalah deskripsi singkat artikel kedua." },
-  { title: "Artikel 3", slug: "artikel-3", desc: "Ini adalah deskripsi singkat artikel ketiga." },
-];
 
-export default function Blog() {
+export default async function Blog() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog`);
+  const articles = (await res.json()).data;
+
   return (
     <div className="text-center">
       <h1 className="section-title">Blog</h1>

@@ -1,22 +1,34 @@
 import { notFound } from "next/navigation";
+import ArticleContent from "./ArticleContent"
+import Link from "next/link";
 
-const articles = {
-  "artikel-1": { title: "Artikel 1", content: "Ini isi dari artikel pertama. Lorem ipsum dolor sit amet..." },
-  "artikel-2": { title: "Artikel 2", content: "Ini isi dari artikel kedua. Lorem ipsum dolor sit amet..." },
-  "artikel-3": { title: "Artikel 3", content: "Ini isi dari artikel ketiga. Lorem ipsum dolor sit amet..." },
-};
-
-export default function BlogDetail({ params }) {
-  const article = articles[params.slug];
+export default async function BlogDetail({ params }) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog/${params.slug}`);
+  const article = (await res.json()).data;
 
   if (!article) {
     return notFound();
   }
 
   return (
-    <div className="text-center">
-      <h1 className="section-title">{article.title}</h1>
-      <p className="text-muted max-w-2xl mx-auto">{article.content}</p>
-    </div>
+    <div>
+      <Link
+          href="/blog"
+          className="text-blue-600 hover:underline text-sm inline-flex items-center gap-1"
+        >
+          ← Kembali ke Blog
+        </Link>
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
+      <ArticleContent content={article.content} />
+      <div className="mt-8">
+        <Link
+          href="/blog"
+          className="text-blue-600 hover:underline text-sm inline-flex items-center gap-1"
+        >
+          ← Kembali ke Blog
+        </Link>
+      </div>
+    </div></div>
   );
 }

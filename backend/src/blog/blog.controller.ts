@@ -26,6 +26,11 @@ export class BlogController {
     return ResponseHelper.success(await this.blogService.findAll(page, limit));
   }
 
+  @Get(':slug')
+  async findOne(@Param('slug') slug: string) {
+    return ResponseHelper.success(await this.blogService.findOne(slug));
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() body: BlogDto) {

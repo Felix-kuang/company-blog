@@ -7,10 +7,14 @@ export default function FAQ() {
   const [faqs, setFaqs] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
 
+  // menggunakan useEffect untuk mengambil data dari API secara dinamis saat komponen dimuat.
+  // Mengapa pakai useEffect dan bukan getStaticProps?
+  // Karena komponen ini membutuhkan interaktivitas (state dan event handling),
+  // sehingga data harus di-fetch setelah komponen ter-render, bukan pada build time.
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/faq`)
       .then((res) => res.json())
-      .then((data) => setFaqs(data))
+      .then((data) => setFaqs(data.data))
       .catch((err) => console.error("Terjadi Error:", err));
   });
 
@@ -26,7 +30,7 @@ export default function FAQ() {
         return (
           <div
             key={i}
-            className={`border 
+            className={`border
               ${isOpen ? "border-blue-500" : "border-gray-300"}
               transition
               rounded-lg overflow-hidden`}

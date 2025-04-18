@@ -1,15 +1,6 @@
-"use client";
-import { useState, useEffect } from "react";
 
-export default function Services() {
-  const [services, setServices] = useState([]);
-
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/our-service`)
-      .then((res) => res.json())
-      .then((data) => setServices(data.data))
-      .catch((err) => console.error("Terjadi Error:", err));
-  });
+export default async function Services() {
+  const services = await getServices();
 
   return (
     <div className="text-center">
@@ -28,4 +19,14 @@ export default function Services() {
       </div>
     </div>
   );
+}
+
+export async function getServices(){
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/our-service`,{
+    cache:'no-cache',
+    next:{revalidate: 24*60*60}
+  })
+  const data = await res.json()
+
+  return data.data;
 }

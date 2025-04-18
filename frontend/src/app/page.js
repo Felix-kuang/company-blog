@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Testimonials from "@/components/Testimonials";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const companyData = await getCompanyData();
+
   return (
     <>
       <section className="relative text-center py-20 text-white overflow-hidden">
@@ -13,9 +15,9 @@ export default function HomePage() {
 
         {/* Content */}
         <div className="relative z-10">
-          <h1 className="text-5xl font-bold">Welcome to Our Company</h1>
+          <h1 className="text-5xl font-bold">Welcome to {companyData.name}</h1>
           <p className="mt-4 text-lg">
-            We provide awesome services to help your business grow.
+            {companyData.slogan}
           </p>
           <Link href={"/services"}>
             <button className="mt-6 btn-primary">Get Started</button>
@@ -27,9 +29,7 @@ export default function HomePage() {
       <section className="container mx-auto p-10 text-center">
         <h2 className="section-title">Who We Are</h2>
         <p className="text-muted max-w-2xl mx-auto">
-          Kami adalah perusahaan yang bergerak di bidang [isi bidang bisnis].
-          Dengan pengalaman bertahun-tahun, kami berkomitmen untuk memberikan
-          layanan terbaik kepada pelanggan.
+          {companyData.about}
         </p>
         <Link href="/about">
           <button className="mt-6 btn-primary">Learn More</button>
@@ -39,4 +39,13 @@ export default function HomePage() {
       <Testimonials />
     </>
   );
+}
+
+async function getCompanyData() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
+    cache: 'no-cache',
+    next: { revalidate: 24*60*60 },
+  })
+  const data = await res.json();
+  return data.data;
 }

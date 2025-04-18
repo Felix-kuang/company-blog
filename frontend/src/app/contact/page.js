@@ -1,16 +1,5 @@
-"use client";
-import { useState, useEffect } from "react";
-
-export default function Contact() {
-  const { companyData, setCompanyData } = [];
-  const baseUrl = process.env.BASE_URL;
-
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/company`)
-      .then((res) => res.json())
-      .then((data) => setCompanyData(data))
-      .catch((err) => console.error("Terjadi Error:", err));
-  });
+export default async function Contact() {
+  const {phone,email} = await getContact();
 
   return (
     <div className="text-center">
@@ -54,9 +43,21 @@ export default function Contact() {
 
       <div className="mt-6">
         <p className="text-gray-600">Atau hubungi langsung:</p>
-        <p className="font-semibold">📧 {companyData}</p>
-        <p className="font-semibold">📞 {companyData}</p>
+        <p className="font-semibold">📧 {email}</p>
+        <p className="font-semibold">📞 {phone}</p>
       </div>
     </div>
   );
+}
+
+async function getContact() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
+    cache: 'no-cache',
+    next: { revalidate: 24*60*60 },
+  })
+  const data = await res.json();
+  return {
+    "phone" : data.data.phone,
+    "email" : data.data.email,
+  };
 }

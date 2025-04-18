@@ -4,13 +4,13 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Navbar() {
+export default function Navbar({companyName}) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <nav className="bg-white shodow-md py-4">
       <div className="container mx-auto flex justify-between items-center px-6">
         <Link href="/">
-          <h1 className="text-xl font-bold">Company</h1>
+          <h1 className="text-xl font-bold">{companyName}</h1>
         </Link>
 
         {/* Mobile Navigation */}
