@@ -26,13 +26,14 @@ describe('AuthService', () => {
     const mockUser = {
       id: 1,
       username: 'testuser',
+      email: 'email@example.com',
     } as Users;
 
     const result = authService.generateJwt(mockUser);
 
     const signSpy = jest.spyOn(jwtService, 'sign');
     expect(signSpy).toHaveBeenCalledWith(
-      { username: 'testuser', sub: 1 },
+      { username: 'testuser', sub: 1, email: 'email@example.com' },
       expect.any(Object),
     );
 
