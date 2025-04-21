@@ -61,4 +61,13 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ### Notes
 Feel free to modify the UI and features to fit your needs! 🎉 This is just a basic setup to get you started with Next.js, Tailwind, and NestJS.
 
-Let me know if there’s anything you want to tweak or add! 😊
+## Planned Enhancements
+
+This project is still a work in progress. A basic CMS (Content Management System) feature is currently under development, aiming to:
+
+- Allow admins to create and manage blog posts directly from the UI
+- Store and display blog content dynamically
+- Include a simple admin dashboard interface
+
+The CMS feature is part of a future phase to enhance the functionality and serve as practice for implementing front-end CRUD operations.
+
