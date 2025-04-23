@@ -3,7 +3,7 @@ import ArticleContent from "./ArticleContent"
 import Link from "next/link";
 
 export default async function BlogDetail({ params }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog/${params.slug}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${params.slug}`);
   const article = (await res.json()).data;
 
   if (!article) {
@@ -13,7 +13,7 @@ export default async function BlogDetail({ params }) {
   return (
     <div>
       <Link
-          href="/blog"
+          href="/company-profile/blog"
           className="text-blue-600 hover:underline text-sm inline-flex items-center gap-1"
         >
           ← Kembali ke Blog
@@ -23,7 +23,7 @@ export default async function BlogDetail({ params }) {
       <ArticleContent content={article.content} />
       <div className="mt-8">
         <Link
-          href="/blog"
+          href="/company-profile/blog"
           className="text-blue-600 hover:underline text-sm inline-flex items-center gap-1"
         >
           ← Kembali ke Blog

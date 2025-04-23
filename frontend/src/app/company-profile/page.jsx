@@ -1,8 +1,30 @@
 import Link from "next/link";
-import Testimonials from "@/components/Testimonials";
+import Testimonials from "@/app/company-profile/components/Testimonials";
+
+async function getCompanyData() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`,
+    {
+      cache: "no-cache",
+      next: { revalidate: 24 * 60 * 60 },
+    }
+  );
+  const data = await res.json();
+  return data.data;
+}
+
+async function getTestimony() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/testimonial`, {
+    cache: 'no-cache',
+    next: { revalidate: 24*60*60 },
+  });
+  const data = await res.json();
+  return data.data;
+}
 
 export default async function HomePage() {
   const companyData = await getCompanyData();
+  const testimonials = await getTestimony();
 
   return (
     <>
@@ -16,10 +38,8 @@ export default async function HomePage() {
         {/* Content */}
         <div className="relative z-10">
           <h1 className="text-5xl font-bold">Welcome to {companyData.name}</h1>
-          <p className="mt-4 text-lg">
-            {companyData.slogan}
-          </p>
-          <Link href={"/services"}>
+          <p className="mt-4 text-lg">{companyData.slogan}</p>
+          <Link href={"/company-profile/services"}>
             <button className="mt-6 btn-primary">Get Started</button>
           </Link>
         </div>
@@ -28,24 +48,14 @@ export default async function HomePage() {
       {/* About Preview */}
       <section className="container mx-auto p-10 text-center">
         <h2 className="section-title">Who We Are</h2>
-        <p className="text-muted max-w-2xl mx-auto">
-          {companyData.about}
-        </p>
-        <Link href="/about">
+        <p className="text-muted max-w-2xl mx-auto">{companyData.about}</p>
+        <Link href="/company-profile/about">
           <button className="mt-6 btn-primary">Learn More</button>
         </Link>
       </section>
 
-      <Testimonials />
+      <Testimonials items={testimonials} />
     </>
   );
 }
 
-async function getCompanyData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
-    cache: 'no-cache',
-    next: { revalidate: 24*60*60 },
-  })
-  const data = await res.json();
-  return data.data;
-}

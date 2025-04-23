@@ -2,7 +2,7 @@ import Link from "next/link";
 
 
 export default async function Blog() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blog`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blog`);
   const articles = (await res.json()).data;
 
   return (
@@ -15,7 +15,7 @@ export default async function Blog() {
           <div key={article.slug} className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition">
             <h2 className="text-xl font-semibold">{article.title}</h2>
             <p className="text-muted">{article.desc}</p>
-            <Link href={`/blog/${article.slug}`} className="text-blue-600 hover:underline mt-2 inline-block">
+            <Link href={`blog/${article.slug}`} className="text-blue-600 hover:underline mt-2 inline-block">
               Baca Selengkapnya →
             </Link>
           </div>

@@ -15,14 +15,14 @@ export default async function About() {
           src={`/image/work.jpg`}
           width={400}
           height={300}
-          className="rounded-lg shadow-lg transform transition-all hover:scale-105"
+          className="rounded-lg h-auto shadow-lg transform transition-all hover:scale-105"
         />
         <Image
           alt="Work Environment"
           src={`/image/office.jpeg`}
           width={400}
           height={300}
-          className="rounded-lg shadow-lg transform transition-all hover:scale-105"
+          className="rounded-lg h-auto shadow-lg transform transition-all hover:scale-105"
         />
       </div>
     </div>
@@ -30,7 +30,7 @@ export default async function About() {
 }
 
 async function getCompanyData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
     cache: 'no-cache',
     next: { revalidate: 24*60*60 },
   })

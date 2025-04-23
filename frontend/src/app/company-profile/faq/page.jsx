@@ -12,7 +12,7 @@ export default function FAQ() {
   // Karena komponen ini membutuhkan interaktivitas (state dan event handling),
   // sehingga data harus di-fetch setelah komponen ter-render, bukan pada build time.
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/faq`)
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/faq`)
       .then((res) => res.json())
       .then((data) => setFaqs(data.data))
       .catch((err) => console.error("Terjadi Error:", err));

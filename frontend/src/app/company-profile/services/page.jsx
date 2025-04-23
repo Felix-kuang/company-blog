@@ -22,7 +22,7 @@ export default async function Services() {
 }
 
 export async function getServices(){
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/our-service`,{
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/our-service`,{
     cache:'no-cache',
     next:{revalidate: 24*60*60}
   })

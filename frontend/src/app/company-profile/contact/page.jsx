@@ -51,7 +51,7 @@ export default async function Contact() {
 }
 
 async function getContact() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
     cache: 'no-cache',
     next: { revalidate: 24*60*60 },
   })

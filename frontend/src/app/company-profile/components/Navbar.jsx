@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Navbar({companyName}) {
+export default function Navbar({ companyName, navItems }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <nav className="bg-white shodow-md py-4">
+    <nav className="bg-white shadow-md py-4">
       <div className="container mx-auto flex justify-between items-center px-6">
         <Link href="/">
           <h1 className="text-xl font-bold">{companyName}</h1>
@@ -19,9 +19,11 @@ export default function Navbar({companyName}) {
         </button>
 
         {/* Desktop Menus */}
-        <ul className="hidden md:flex space-x-6">
-          <NavItems />
-        </ul>
+        {navItems?.length > 0 && (
+          <ul className="hidden md:flex space-x-6">
+            <NavItems items={navItems} />
+          </ul>
+        )}
       </div>
 
       {/* Mobile Nav */}
@@ -39,7 +41,9 @@ export default function Navbar({companyName}) {
                 <X />
               </button>
               <ul className="flex flex-col space-y-4">
-                <NavItems onClick={() => setIsOpen(false)} />
+                {navItems?.length > 0 && (
+                  <NavItems onClick={() => setIsOpen(false)} items={navItems} />
+                )}
               </ul>
             </div>
           </motion.div>
@@ -49,19 +53,14 @@ export default function Navbar({companyName}) {
   );
 }
 
-function NavItems({ onClick }) {
-  const items = [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
-    { label: "Services", href: "/services" },
-    { label: "Blog", href: "/blog" },
-    { label: "FAQ", href: "/faq" },
-    { label: "Contact", href: "/contact" },
-  ];
-
+function NavItems({ onClick, items }) {
   return items.map((item) => (
     <li key={item.href}>
-      <Link href={item.href} className="hover:text-blue-500" onClick={onClick}>
+      <Link
+        href={item.href}
+        className="hover:text-blue-500"
+        onClick={onClick}
+      >
         {item.label}
       </Link>
     </li>
