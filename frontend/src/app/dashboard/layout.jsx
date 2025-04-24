@@ -2,12 +2,12 @@
 
 import "../globals.css";
 import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
+import Header from "./components/Header";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 export default function RootLayout({ children }) {
-  const [activeTab, setActiveTab] = useState("companyData");
+  const [open, setOpen] = useState(false);
   const pathname = usePathname(); // Ambil pathname saat ini
 
   // Cek kalau path-nya '/login', ga tampilkan sidebar
@@ -15,10 +15,10 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      {!isLoginPage && <Sidebar setActiveTab={setActiveTab}/>}
       <body className="flex">
+      {!isLoginPage && <Sidebar open={open} setOpen={setOpen}/>}
         <div className="w-full">
-          <Navbar />
+          <Header />
           <div className="p-6">{children}</div>
         </div>
       </body>
