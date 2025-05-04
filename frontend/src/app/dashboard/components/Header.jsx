@@ -1,13 +1,16 @@
-export default function Header({ username }) {
+import { LucideMenu } from "lucide-react";
+
+export default function Header({ username, setOpen }) {
   return (
     <header className="bg-white shadow-sm z-10">
       <div className="px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="hidden md:flex md:flex-1 md:items-center">
-              <div className="relative max-w-xs w-full"></div>
+            <div className="flex items-center lg:hidden">
+              <LucideMenu
+                onClick={() => setOpen(true)}
+                className="cursor-pointer"
+              />
             </div>
-          </div>
           <span> Admin Dashboard </span>
           <div className="flex items-center space-x-4">
             <div className="border-l border-gray-200 h-8 mx-2"></div>

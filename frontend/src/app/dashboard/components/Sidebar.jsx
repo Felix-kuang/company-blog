@@ -11,7 +11,6 @@ import {
   XIcon,
   LogOutIcon,
 } from "lucide-react";
-import { useState } from "react";
 
 export default function Sidebar({open, setOpen}) {
   const pathname = usePathname();

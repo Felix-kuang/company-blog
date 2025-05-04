@@ -14,10 +14,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  async login(
-    @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async login(@Body() loginDto: LoginDto) {
     // Cari user berdasarkan username dan validasi password
     const user = await this.userService.validateUserPassword(
       loginDto.email,
@@ -30,15 +27,18 @@ export class AuthController {
 
     const jwt = this.authService.generateJwt(user);
 
-    res.cookie('token', jwt.access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+    // res.cookie('token', jwt.access_token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === 'production',
+    //   sameSite: 'lax',
+    //   maxAge: 24 * 60 * 60 * 1000,
+    // });
 
     // Generate JWT jika user valid
-    return ResponseHelper.success({ message: 'Login successfull' });
+    return ResponseHelper.success({
+      token: jwt.access_token,
+      user: user,
+    });
   }
 
   @UseGuards(JwtAuthGuard)

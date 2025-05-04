@@ -32,4 +32,7 @@ export class Blog {
   generateSlug() {
     this.slug = slugify(this.title);
   }
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  publishedAt: Date;
 }

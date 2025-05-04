@@ -8,11 +8,13 @@ import {
   Put,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { BlogDto } from './dto/blog.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ResponseHelper } from 'src/utils/response.helper';
+import { User } from 'src/interface/user';
 
 @Controller('blog')
 export class BlogController {
@@ -33,9 +35,10 @@ export class BlogController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() body: BlogDto) {
+  async create(@Body() body: BlogDto, @Request() req) {
+    const author = req as User;
     return ResponseHelper.success(
-      await this.blogService.create(body.title, body.content),
+      await this.blogService.create(body.title, body.content, author.id),
       201,
     );
   }

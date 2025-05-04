@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { Auth } from "../lib/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isloading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -32,8 +33,11 @@ export default function LoginPage() {
 
       const data = (await res.json()).data;
 
-      sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("username", data.username);
+      Auth.setToken(data.token)
+      Auth.setUsername(data.user.username)
+
+      // sessionStorage.setItem("token", data.token);
+      // sessionStorage.setItem("username", data.user.username);
 
       router.push("/dashboard");
     } catch (error) {
@@ -85,11 +89,11 @@ export default function LoginPage() {
           <button
             type="submit"
             className={`w-full bg-blue-600 text-white py-2 rounded-md ${
-              isloading ? "opacity-50" : ""
+              isLoading ? "opacity-50" : ""
             }`}
-            disabled={isloading}
+            disabled={isLoading}
           >
-            {isloading ? "Logging in..." : "login"}
+            {isLoading ? "Logging in..." : "login"}
           </button>
         </form>
       </div>

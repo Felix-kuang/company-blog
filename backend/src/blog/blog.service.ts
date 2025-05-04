@@ -3,12 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Blog } from './blog.entity';
 import { Repository } from 'typeorm';
 import { slugify } from 'src/utils/slugify';
+import { Users } from 'src/users/users.entity';
 
 @Injectable()
 export class BlogService {
   constructor(
     @InjectRepository(Blog)
     private blogRepository: Repository<Blog>,
+
+    @InjectRepository(Users)
+    private usersRepository: Repository<Users>,
   ) {}
 
   findAll(page: number = 1, limit: number = 10): Promise<Blog[]> {
@@ -33,8 +37,41 @@ export class BlogService {
     return blog;
   }
 
-  create(title: string, content: string): Promise<Blog> {
-    const blog = this.blogRepository.create({ title, content });
+  async findByAuthor(
+    userId: number,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<Blog[]> {
+    return this.blogRepository.find({
+      where: { author: { id: userId }, isDeleted: false },
+      relations: ['author'],
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+  }
+
+  async create(
+    title: string,
+    content: string,
+    authorId: number,
+  ): Promise<Blog> {
+    const author = await this.usersRepository.findOne({
+      where: { id: authorId },
+    });
+
+    if (!author) {
+      throw new NotFoundException(
+        `Author dengan ID ${authorId} tidak ditemukan`,
+      ); // Handle the case where the author is not found
+    }
+
+    const blog = this.blogRepository.create({
+      title,
+      content,
+      author,
+      slug: slugify(title),
+    });
+
     return this.blogRepository.save(blog);
   }
 

@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Test, TestingModule } from '@nestjs/testing';
 import { BlogService } from './blog.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Blog } from './blog.entity';
 import { NotFoundException } from '@nestjs/common/exceptions';
+import { Users } from 'src/users/users.entity';
 
-const mockBlogRepository = () => ({
+const mockRepository = () => ({
   find: jest.fn(),
   findOne: jest.fn(),
   create: jest.fn(),
@@ -14,13 +16,14 @@ const mockBlogRepository = () => ({
 
 describe('BlogService', () => {
   let service: BlogService;
-  let repo: ReturnType<typeof mockBlogRepository>;
+  let repo: ReturnType<typeof mockRepository>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         BlogService,
-        { provide: getRepositoryToken(Blog), useFactory: mockBlogRepository },
+        { provide: getRepositoryToken(Blog), useFactory: mockRepository },
+        { provide: getRepositoryToken(Users), useFactory: mockRepository },
       ],
     }).compile();
 
@@ -48,6 +51,33 @@ describe('BlogService', () => {
     expect(result).toEqual(mockBlogs);
   });
 
+  it('should return blogs by the author', async () => {
+    const userId = 1;
+    const page = 1;
+    const limit = 10;
+
+    const mockBlogs = [
+      { id: 1, title: 'Blog 1', content: 'Content 1', author: { id: userId } },
+      { id: 2, title: 'Blog 2', content: 'Content 2', author: { id: userId } },
+    ] as Blog[];
+
+    // Mocking the find method of the BlogRepository
+    repo.find = jest.fn().mockResolvedValue(mockBlogs);
+
+    const result = await service.findByAuthor(userId, page, limit);
+
+    // Verify the repository method was called with the correct arguments
+    expect(repo.find).toHaveBeenCalledWith({
+      where: { author: { id: userId }, isDeleted: false },
+      relations: ['author'],
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    // Verify that the result is as expected
+    expect(result).toEqual(mockBlogs);
+  });
+
   it('should return one blog by slug', async () => {
     const blog = { slug: 'slug-title' } as Blog;
     repo.findOne.mockResolvedValue(blog);
@@ -68,16 +98,55 @@ describe('BlogService', () => {
   });
 
   it('should create and save a new blog', async () => {
+    // Mock Author data
+    const mockAuthor = {
+      id: 1,
+      username: 'testUser',
+      password: 'password',
+      email: 'test@example.com',
+    } as Users;
+
+    // Blog data
     const data = { title: 'Test', content: 'content' };
-    const mockBlog = { ...data } as Blog;
+    const mockBlog = { ...data, author: mockAuthor, slug: 'test' } as Blog;
 
-    repo.create.mockReturnValue(mockBlog);
-    repo.save.mockResolvedValue(mockBlog);
+    // Mock the Users repository to return the mockAuthor when finding by ID
+    const mockUserRepository = {
+      findOne: jest.fn().mockResolvedValue(mockAuthor), // Mock the findOne method
+    };
 
-    const result = await service.create(data.title, data.content);
+    // Mock the Blog repository methods
+    const mockBlogRepository = {
+      create: jest.fn().mockReturnValue(mockBlog), // Mock create method
+      save: jest.fn().mockResolvedValue(mockBlog), // Mock save method
+    };
 
-    expect(repo.create).toHaveBeenCalledWith(data);
-    expect(repo.save).toHaveBeenCalledWith(mockBlog);
+    // Inject mock repositories into the service (assuming these are the right names)
+    const service = new BlogService(
+      mockBlogRepository as any,
+      mockUserRepository as any,
+    );
+
+    // Call the create method
+    const result = await service.create(
+      data.title,
+      data.content,
+      mockAuthor.id,
+    );
+
+    // Assertions
+    expect(mockUserRepository.findOne).toHaveBeenCalledWith({
+      where: { id: mockAuthor.id },
+    });
+
+    expect(mockBlogRepository.create).toHaveBeenCalledWith({
+      title: data.title,
+      content: data.content,
+      author: mockAuthor,
+      slug: 'test', // Ensure slug is correctly set (slugify is part of the logic)
+    });
+
+    expect(mockBlogRepository.save).toHaveBeenCalledWith(mockBlog);
     expect(result).toEqual(mockBlog);
   });
 
