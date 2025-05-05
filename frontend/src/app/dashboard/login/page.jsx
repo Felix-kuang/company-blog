@@ -34,10 +34,6 @@ export default function LoginPage() {
       const data = (await res.json()).data;
 
       Auth.setToken(data.token)
-      Auth.setUsername(data.user.username)
-
-      // sessionStorage.setItem("token", data.token);
-      // sessionStorage.setItem("username", data.user.username);
 
       router.push("/dashboard");
     } catch (error) {

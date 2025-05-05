@@ -1,6 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Auth } from "../lib/auth";
+import Container from "../components/Container";
+import EditButton from "../components/EditButton";
+import SaveCancelButtons from "../components/SaveCancelButton";
+import FormInput from "../components/FormInput";
 
 const fields = [
   { label: "Name", name: "name" },
@@ -46,7 +50,7 @@ export default function CompanyDataPage() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${Auth.getToken()}`
+          Authorization: `Bearer ${Auth.getToken()}`,
         },
         body: JSON.stringify(formData),
       }
@@ -67,7 +71,7 @@ export default function CompanyDataPage() {
   if (!company) return <p className="p-6">Loading...</p>;
 
   return (
-    <div className="p-6">
+    <Container>
       <h2 className="text-2xl font-semibold mb-4">Company Data</h2>
       {!editMode ? (
         <div className="bg-white rounded-md shadow p-6 space-y-4 border border-gray-200">
@@ -80,48 +84,32 @@ export default function CompanyDataPage() {
             </div>
           ))}
 
-          <button
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          <EditButton
             onClick={() => {
               setFormData(company); // clone current company data
               setEditMode(true);
             }}
-          >
-            Edit
-          </button>
+          />
         </div>
       ) : (
         <div className="space-y-4">
           {fields.map((field) => (
-            <div key={field.name}>
-              <label className="block font-medium mb-1">{field.label}</label>
-              <input
-                type="text"
-                name={field.name}
-                value={formData[field.name] || ""}
-                onChange={handleInputChange}
-                className="w-full border border-gray-300 px-3 py-2 rounded"
-              />
-            </div>
+            <FormInput
+              key={field.name}
+              label={field.label}
+              name={field.name}
+              value={formData[field.name]}
+              onChange={handleInputChange}
+            />
           ))}
           <div className="space-x-2">
-            <button
-              type="button"
-              onClick={handleSave}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-            >
-              Save
-            </button>
-            <button
-              type="button"
-              onClick={() => setEditMode(false)}
-              className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
-            >
-              Cancel
-            </button>
+            <SaveCancelButtons
+              onSave={handleSave}
+              onCancel={() => setEditMode(false)}
+            />
           </div>
         </div>
       )}
-    </div>
+    </Container>
   );
 }

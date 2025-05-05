@@ -18,16 +18,16 @@ export const Auth = {
     }
   },
 
-  getUsername: () => {
+  getUser: () => {
     if (typeof window !== "undefined") {
-      return sessionStorage.getItem("username");
+      return sessionStorage.getItem("user");
     }
     return null; // Return null if called server-side
   },
 
-  setUsername: (username) => {
+  setUser: (userData) => {
     if (typeof window !== "undefined") {
-      sessionStorage.setItem("username", username);
+      sessionStorage.setItem("user", userData);
     }
   },
 
