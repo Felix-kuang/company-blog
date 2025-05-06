@@ -37,7 +37,6 @@ export class AuthController {
     // Generate JWT jika user valid
     return ResponseHelper.success({
       token: jwt.access_token,
-      user: user,
     });
   }
 

@@ -21,10 +21,16 @@ export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
   @Get()
-  async findAll(
+  async findBlogs(
+    @Query('authorId') authorId?: number,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ) {
+    if (authorId) {
+      return ResponseHelper.success(
+        await this.blogService.findByAuthor(authorId, page, limit),
+      );
+    }
     return ResponseHelper.success(await this.blogService.findAll(page, limit));
   }
 
