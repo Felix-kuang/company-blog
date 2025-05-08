@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import Auth from "@/app/utils/auth";
-import axiosInstance from "@/app/utils/axiosInstance";
+import Auth from "@/app/dashboard/utils/auth";
+import axiosInstance from "@/app/dashboard/utils/axiosInstance";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

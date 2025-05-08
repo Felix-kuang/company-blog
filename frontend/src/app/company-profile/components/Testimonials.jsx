@@ -1,6 +1,4 @@
 export default function Testimonials({items}) {
-  console.log("ini testimoni")
-  console.log(items);
   return (
     <div className="text-center mt-12">
       <h2 className="section-title">What Our Clients Say</h2>

@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import Auth from "@/app/utils/auth"
+import Auth from "@/app/dashboard/utils/auth"
 
 export default function RootLayout({ children }) {
   const [open, setOpen] = useState(false);

@@ -5,7 +5,7 @@ import {useRouter} from "next/navigation";
 import Container from "../components/Container";
 import DataTable from "../components/DataTable";
 import AddButton from "../components/AddButton";
-import axiosInstance from "@/app/utils/axiosInstance";
+import axiosInstance from "@dashboard/utils/axiosInstance";
 
 export default function BlogPage() {
     const router = useRouter();
@@ -76,8 +76,6 @@ export default function BlogPage() {
                     onDelete={handleDelete}
                     onEdit={handleEdit}
                 />
-
-
             </div>
         </Container>
     );

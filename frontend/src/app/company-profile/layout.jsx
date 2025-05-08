@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import Navbar from "@/app/company-profile/components/Navbar";
 import Footer from "@/app/company-profile/components/Footer";
 import "../globals.css";
+import axios from "axios";
 
 export default function RootLayout({ children }) {
   const [companyName, setCompanyName] = useState('');
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`);  // Ganti dengan endpoint API yang benar
-      const data = (await res.json()).data;
+    void(async () => {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`);
+      const data = res.data.data;
       setCompanyName(data.name);
 
       setItems([
@@ -25,9 +26,7 @@ export default function RootLayout({ children }) {
       ]);
 
       setLoading(false);
-    };
-
-    fetchData();
+    })();
   }, []);
 
 

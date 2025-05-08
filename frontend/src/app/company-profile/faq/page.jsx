@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
+import axios from "axios";
 
 export default function FAQ() {
   const [faqs, setFaqs] = useState([]);
@@ -12,10 +13,17 @@ export default function FAQ() {
   // Karena komponen ini membutuhkan interaktivitas (state dan event handling),
   // sehingga data harus di-fetch setelah komponen ter-render, bukan pada build time.
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/faq`)
-      .then((res) => res.json())
-      .then((data) => setFaqs(data.data))
-      .catch((err) => console.error("Terjadi Error:", err));
+    void(async () => {
+     try {
+       const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/faq`);
+       setFaqs(res.data.data);
+     }catch (e) {
+       console.log(e);
+     }
+    })();
+      // .then((res) => res.json())
+      // .then((data) => setFaqs(data.data))
+      // .catch((err) => console.error("Terjadi Error:", err));
   });
 
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i);

@@ -1,9 +1,9 @@
 'use client'
 import {useParams, useRouter} from 'next/navigation';
 import {useEffect, useState} from "react";
-import FormInput from "@/app/dashboard/components/FormInput";
-import SaveCancelButtons from "@/app/dashboard/components/SaveCancelButton";
-import Auth from "@/app/dashboard/lib/auth";
+import FormInput from "@dashboard/components/FormInput";
+import SaveCancelButtons from "@dashboard/components/SaveCancelButton";
+import axiosInstance from "@dashboard/utils/axiosInstance";
 
 export default function EditBlogPage() {
     const params = useParams();
@@ -21,11 +21,16 @@ export default function EditBlogPage() {
     }]
 
     useEffect(() => {
-        void (async () => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${blogSlug}`);
-            const data = await res.json();
-            setBlog(data.data);
-        })();
+        try{
+            void (async () => {
+                const res = await axiosInstance.get(`/blog/${blogSlug}`);
+                const data = await res.data;
+                setBlog(data.data);
+            })();
+        } catch (e) {
+            console.error(e);
+            alert(e.message);
+        }
     }, [blogSlug]);
 
     const handleInputChange = (e) => {
@@ -38,24 +43,19 @@ export default function EditBlogPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${blogSlug}`, {
-            method: 'PUT',
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${Auth.getToken()}`,
-            },
-            body: JSON.stringify(blog)
+        try{
+            const res = await axiosInstance.put(
+                `/blog/${blogSlug}`,
+                {...blog}
+            );
 
-        });
-
-        if (res.ok) {
-            const data = await res.json();
-            alert(data.message); // Assuming response includes a message
+            alert("data saved successfully!");
             router.push('/dashboard/blogs');
-        } else {
-            const errorData = await res.json();
-            alert(errorData.message || 'Failed to update blog');
+        } catch (e) {
+            console.log(e);
+            alert("Error saving blog post");
         }
+
     }
 
     const handleCancel = (e) => {

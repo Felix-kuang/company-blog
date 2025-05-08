@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default async function Contact() {
   const {phone,email} = await getContact();
 
@@ -51,11 +53,12 @@ export default async function Contact() {
 }
 
 async function getContact() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
-    cache: 'no-cache',
-    next: { revalidate: 24*60*60 },
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/company/${process.env.NEXT_PUBLIC_COMPANY_ID}`, {
+    headers : {
+      'Cache-Control': 'no-cache',
+    }
   })
-  const data = await res.json();
+  const data = res.data;
   return {
     "phone" : data.data.phone,
     "email" : data.data.email,

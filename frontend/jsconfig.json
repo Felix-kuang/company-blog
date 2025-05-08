@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@dashboard/*" : ["./src/app/dashboard/*"],
+      "@company-profile/*" : ["./src/app/company-profile/*"]
     }
   }
 }

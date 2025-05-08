@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import ArticleContent from "./ArticleContent"
 import Link from "next/link";
+import axios from "axios";
 
 export default async function BlogDetail({ params }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${params.slug}`);
-  const article = (await res.json()).data;
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${params.slug}`);
+  const article = res.data.data;
 
   if (!article) {
     return notFound();

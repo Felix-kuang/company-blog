@@ -1,3 +1,4 @@
+import axios from "axios";
 
 export default async function Services() {
   const services = await getServices();
@@ -22,11 +23,11 @@ export default async function Services() {
 }
 
 export async function getServices(){
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/our-service`,{
-    cache:'no-cache',
-    next:{revalidate: 24*60*60}
-  })
-  const data = await res.json()
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/our-service`, {
+        headers: {
+            'Cache-Control': 'no-cache',
+        },
+    });
 
-  return data.data;
+    return res.data.data;
 }

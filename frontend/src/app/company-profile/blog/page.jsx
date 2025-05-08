@@ -1,9 +1,10 @@
 import Link from "next/link";
+import axios from "axios";
 
 
 export default async function Blog() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blog`);
-  const articles = (await res.json()).data;
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/blog`);
+  const articles = res.data.data;
 
   return (
     <div className="text-center">

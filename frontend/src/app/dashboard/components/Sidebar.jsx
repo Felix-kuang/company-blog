@@ -9,11 +9,11 @@ import {
   HandPlatterIcon,
   LogOutIcon,
 } from "lucide-react";
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 
 import SidebarHeader from "./SidebarHeader";
 import SidebarNav from "./SidebarNav";
-import Auth from "@/app/utils/auth";
+import Auth from "@dashboard/utils/auth";
 
 
 export default function Sidebar({ open, setOpen }) {
