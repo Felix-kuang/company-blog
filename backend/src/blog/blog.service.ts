@@ -18,6 +18,16 @@ export class BlogService {
   findAll(page: number = 1, limit: number = 10): Promise<Blog[]> {
     return this.blogRepository.find({
       relations: ['author'],
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        publishedAt: true,
+        slug: true,
+        author: {
+          username: true,
+        },
+      },
       where: { isDeleted: false },
       skip: (page - 1) * limit,
       take: limit,
@@ -28,6 +38,16 @@ export class BlogService {
     const blog = await this.blogRepository.findOne({
       where: { slug, isDeleted: false },
       relations: ['author'],
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        publishedAt: true,
+        slug: true,
+        author: {
+          username: true,
+        },
+      },
     });
 
     if (!blog) {
@@ -45,6 +65,16 @@ export class BlogService {
     return this.blogRepository.find({
       where: { author: { id: userId }, isDeleted: false },
       relations: ['author'],
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        publishedAt: true,
+        slug: true,
+        author: {
+          username: true,
+        },
+      },
       skip: (page - 1) * limit,
       take: limit,
     });

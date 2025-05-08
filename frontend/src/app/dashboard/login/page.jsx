@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { Auth } from "../lib/auth";
+import Auth from "@/app/utils/auth";
+import axiosInstance from "@/app/utils/axiosInstance";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -15,29 +16,26 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
 
+    if (!email || !password) {
+      toast.warning("Email and password are required.");
+      return;
+    }
+
     try {
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_BASE_URL + "/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
+      const res = await axiosInstance.post(
+          "/auth/login",
+          { email, password }
       );
 
-      if (!res.ok) {
-        throw new Error("Invalid Credentials");
-      }
+      const data = res.data;
 
-      const data = (await res.json()).data;
-
-      Auth.setToken(data.token)
+      Auth.setToken(data.data.token)
 
       router.push("/dashboard");
+
     } catch (error) {
-      toast.error(error.message || "login failed");
+      const message = error.response?.data?.message || error.message || "Login failed";
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +55,7 @@ export default function LoginPage() {
             >
               Email
             </label>
-            <input
+            <input autoFocus={true}
               type="email"
               id="email"
               value={email}

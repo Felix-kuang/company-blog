@@ -10,16 +10,15 @@ import {
   LogOutIcon,
 } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
-import { Auth } from "../lib/auth";
 
 import SidebarHeader from "./SidebarHeader";
 import SidebarNav from "./SidebarNav";
+import Auth from "@/app/utils/auth";
 
 
 export default function Sidebar({ open, setOpen }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [loadingMenu, setLoadingMenu] = useState(null);
 
   const menus = useMemo(
     () => [
@@ -41,10 +40,6 @@ export default function Sidebar({ open, setOpen }) {
     Auth.removeToken();
     router.push("/dashboard/login");
   };
-
-  useEffect(() => {
-    setLoadingMenu(null);
-  }, [pathname]);
 
   return (
     <>
@@ -68,8 +63,6 @@ export default function Sidebar({ open, setOpen }) {
         <SidebarNav
           menus={menus}
           pathname={pathname}
-          loadingMenu={loadingMenu}
-          setLoadingMenu={setLoadingMenu}
           setOpen={setOpen}
         />
         {/* Logout */}

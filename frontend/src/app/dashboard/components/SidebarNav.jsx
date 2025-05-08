@@ -3,8 +3,6 @@ import Link from "next/link";
 export default function SidebarNav({
   menus,
   pathname,
-  loadingMenu,
-  setLoadingMenu,
   setOpen,
 }) {
   return (
@@ -12,7 +10,6 @@ export default function SidebarNav({
       <ul className="space-y-1">
         {menus.map((item) => {
           const isActive = pathname === item.href;
-          const isLoading = loadingMenu === item.name;
           return (
             <li key={item.name} className="relative">
               {isActive && (
@@ -22,7 +19,6 @@ export default function SidebarNav({
                 href={item.href}
                 onClick={() => {
                   setOpen(false);
-                  setLoadingMenu(item.name);
                 }}
                 className={`flex items-center px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-150
                 ${

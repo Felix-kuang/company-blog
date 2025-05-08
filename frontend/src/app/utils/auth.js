@@ -1,4 +1,4 @@
-export const Auth = {
+const Auth = {
   getToken: () => {
     if (typeof window !== "undefined") {
       return sessionStorage.getItem("token");
@@ -44,3 +44,5 @@ export const Auth = {
     return false; // Return false if called server-side
   },
 };
+
+export default Auth;

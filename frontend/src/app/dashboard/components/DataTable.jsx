@@ -35,10 +35,10 @@ export default function DataTable({
               ))}
               {hasActions && (
                 <td className="py-4 px-6 space-x-3">
-                    {onEdit && <button className="text-blue-600 hover:text-blue-800">
+                    {onEdit && <button className="text-blue-600 hover:text-blue-800" onClick={()=>onEdit(row)}>
                       Edit
                     </button>}
-                    {onDelete && <button className="text-red-600 hover:text-red-800">
+                    {onDelete && <button className="text-red-600 hover:text-red-800" onClick={()=>onDelete(row)}>
                       Delete
                     </button>}
                 </td>

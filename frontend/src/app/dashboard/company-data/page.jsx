@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Auth } from "../lib/auth";
+// import Auth from "../components/Auth";
 import Container from "../components/Container";
 import EditButton from "../components/EditButton";
 import SaveCancelButtons from "../components/SaveCancelButton";
 import FormInput from "../components/FormInput";
+import axiosInstance from "@/app/utils/axiosInstance";
 
 const fields = [
   { label: "Name", name: "name" },
@@ -25,8 +26,8 @@ export default function CompanyDataPage() {
   useEffect(() => {
     // Simulate fetching company data from API
     const fetchCompany = async () => {
-      const companyData = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/company/1`
+      const companyData = await axiosInstance.get(
+        `/company/1`
       ).then((res) => res.json());
       setCompany(companyData.data);
       setFormData(companyData.data);

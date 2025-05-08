@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
-import { Auth } from "./lib/auth";
+import Auth from "@/app/utils/auth"
 
 export default function RootLayout({ children }) {
   const [open, setOpen] = useState(false);
@@ -27,14 +27,21 @@ export default function RootLayout({ children }) {
     if (!token) {
       router.replace("/dashboard/login");
     } else {
+      // Check if the token is expired
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const expirationTime = payload.exp * 1000; // Expiration time in milliseconds
+      const currentTime = Date.now(); // Current time in milliseconds
+
+      if (currentTime > expirationTime) {
+        // Token expired, remove token and redirect to login
+        Auth.removeToken(); // Assuming you have a method to remove the token
+        router.replace("/dashboard/login");
+        return;
+      }
+
+      setUsername(payload.username);
       setReady(true);
     }
-
-    const payload = token
-      ? JSON.parse(atob(token.split(".")[1]))
-      : { username: "" };
-
-    setUsername(payload.username);
   }, [pathname]);
 
   return (
