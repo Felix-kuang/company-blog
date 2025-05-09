@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import ArticleContent from "./ArticleContent"
 import Link from "next/link";
 import axios from "axios";
+import MarkdownPreview from "@/app/components/MarkdownPreview";
 
 export default async function BlogDetail({ params }) {
   const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/blog/${params.slug}`);
@@ -21,7 +22,8 @@ export default async function BlogDetail({ params }) {
         </Link>
     <div className="max-w-2xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
-      <ArticleContent content={article.content} />
+      <MarkdownPreview content={article.content} />
+      {/*<ArticleContent content={article.content} />*/}
       <div className="mt-8">
         <Link
           href="/company-profile/blog"

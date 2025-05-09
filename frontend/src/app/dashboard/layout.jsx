@@ -46,10 +46,10 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className="flex">
+      <body className="flex h-screen">
         {ready && <>
           {!isLoginPage && <Sidebar open={open} setOpen={setOpen} />}
-          <div className="w-full">
+          <div className="flex-1 overflow-y-auto">
             {!isLoginPage && <Header setOpen={setOpen} username={username} />}
             <div className="p-6">{children}</div>
           </div>
